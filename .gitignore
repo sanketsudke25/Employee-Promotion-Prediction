@@ -1,4 +1,4 @@
-*.pkl
+
 *.ipynb
 Dataset/
 __pycache__/

@@ -12,14 +12,11 @@ st.set_page_config(
 # -------------------- CUSTOM CSS --------------------
 st.markdown("""
 <style>
-
-/* Background */
 .stApp {
     background: linear-gradient(135deg, #141E30, #243B55);
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Main Title */
 h1 {
     text-align: center;
     color: white;
@@ -27,7 +24,6 @@ h1 {
     font-weight: 700;
 }
 
-/* Card Container */
 .block-container {
     background: rgba(255, 255, 255, 0.08);
     padding: 2rem;
@@ -36,13 +32,11 @@ h1 {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Labels */
 label {
     color: #ffffff !important;
     font-weight: 600;
 }
 
-/* Buttons */
 .stButton>button {
     width: 100%;
     background: linear-gradient(90deg, #00c6ff, #0072ff);
@@ -60,20 +54,17 @@ label {
     background: linear-gradient(90deg, #0072ff, #00c6ff);
 }
 
-/* Success & Error Box */
 div[data-testid="stAlert"] {
     border-radius: 12px;
     font-weight: bold;
 }
 
-/* Footer */
 .footer {
     text-align: center;
     color: #dfe6e9;
     font-size: 14px;
     margin-top: 20px;
 }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -119,6 +110,8 @@ with col2:
 
     length_of_service = st.number_input("Length of Service", min_value=0, value=5)
 
+    awards_won = st.selectbox("Awards Won?", [0, 1])  # 🔥 ADDED
+
     kpi = st.selectbox("KPIs Met >80%", [0, 1])
 
     avg_training_score = st.number_input("Average Training Score", min_value=0, max_value=100, value=60)
@@ -136,21 +129,24 @@ if st.button("🔍 Predict Promotion Status"):
         "age": age,
         "previous_year_rating": previous_year_rating,
         "length_of_service": length_of_service,
+        "awards_won": awards_won,   # 🔥 FIXED
         "KPIs_met >80%": kpi,
         "avg_training_score": avg_training_score
     }])
 
+    # Apply preprocessing
     input_processed = preprocessor.transform(input_data)
 
+    # Predict
     prediction = model.predict(input_processed)
     probability = model.predict_proba(input_processed)
 
     if prediction[0] == 1:
-        st.success(f"🎉 Employee WILL be Promoted!")
+        st.success("🎉 Employee WILL be Promoted!")
         st.info(f"Confidence: {probability[0][1]*100:.2f}%")
     else:
         st.error("❌ Employee Will NOT be Promoted")
         st.info(f"Confidence: {probability[0][0]*100:.2f}%")
 
 # -------------------- FOOTER --------------------
-st.markdown("<div class='footer'>Model: Random Forest | Metric Focus: Recall | Developed by You 🚀</div>", unsafe_allow_html=True)
+st.markdown("<div class='footer'>Model: Random Forest | Metric Focus: Recall | Developed by Sanket Sudke 🚀</div>", unsafe_allow_html=True)
